@@ -79,6 +79,22 @@ public class AuthenticationPage {
         driver.switchTo().alert().accept();
         return alertText;
     }
+    public boolean isUserLoggedIn() {
+        try {
+             // Try to locate and display the welcome message within the wait time
+             return driver.findElement(welcomeMessage).isDisplayed();
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
+    }
+    public boolean isLogoutLinkVisible() {
+        try {
+            // Check for visibility of the logout link
+            return driver.findElement(logoutLink).isDisplayed();
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
+    }
 
     
     }
