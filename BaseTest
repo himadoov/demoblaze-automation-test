@@ -12,9 +12,9 @@ public class BaseTest {
      AuthenticationPage authPage;
 
     
-     final String UNIQUE_USERNAME_PREFIX = "tester_"; 
+     final String UniqeUserName = "tester_"; 
      String testUsername; 
-     final String VALID_PASSWORD = "Password1!";
+     final String ValidPassword = "Password1!";
      final String BASE_URL = "https://www.demoblaze.com/index.html";
 
     @BeforeClass
@@ -22,7 +22,7 @@ public class BaseTest {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        testUsername = UNIQUE_USERNAME_PREFIX + System.currentTimeMillis();
+        testUsername = UniqeUserName + System.currentTimeMillis();
         driver.get(BASE_URL);
         authPage = new AuthenticationPage(driver);
     }
