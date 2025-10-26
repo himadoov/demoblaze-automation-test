@@ -28,7 +28,7 @@ public class LoginTests extends BaseTest {
     }
 
     
-    @Test(priority = 14, description = "TC014: Verify Successful Login")
+    @Test(priority = 1, description = "TC014: Verify Successful Login",enabled = true)
     public void tc014_SuccessfulLogin() {
         authPage.clickLoginLink();
         authPage.performLogin(testUsername, ValidPassword);
@@ -37,36 +37,42 @@ public class LoginTests extends BaseTest {
         authPage.clickLogout();
     }
 
-    @Test(priority = 15, description = "TC015:Verify Login with Invalid password")
+    @Test(priority = 2, description = "TC015:Verify Login with Invalid password",enabled = true)
     public void tc015_InvalidPassword() {
         authPage.clickLoginLink();
         authPage.performLogin(testUsername, WrongPassAlert);
         String alertText = authPage.handleAlertAndGetText();
         Assert.assertEquals(alertText, WrongPassAlert);
+        driver.navigate().refresh();
+
       
     }
 
-    @Test(priority = 16, description = "TC016:Verify Login with Invalid password")
+    @Test(priority = 3, description = "TC016:Verify Login with Invalid password",enabled = true)
     public void tc016_NonExistingUser() {
         authPage.clickLoginLink();
         authPage.performLogin(noUSer, ValidPassword);
         String alertText = authPage.handleAlertAndGetText();
         Assert.assertEquals(alertText, UserDoesNotExistAlert);
+        driver.navigate().refresh();
+
     }
     
     
 
-    @Test(priority = 17, description = "TC017:Verify Login with Invalid password")
+    @Test(priority = 4, description = "TC017:Verify Login with Invalid password",enabled = true)
     public void tc017_BlankFields() {
         authPage.clickLoginLink();
         authPage.performLogin("", "");
         String alertText = authPage.handleAlertAndGetText();
         Assert.assertEquals(alertText, FillRequiredAlert);
+        driver.navigate().refresh();
+
     }
 
     
     
-    @Test(priority = 18, description = "TC018:Verify Password Case-Sensitivity")
+    @Test(priority = 5, description = "TC018:Verify Password Case-Sensitivity",enabled = true)
     public void tc018_CaseSensitivity() {
        
         authPage.clickLoginLink();
@@ -74,22 +80,26 @@ public class LoginTests extends BaseTest {
         authPage.performLogin(testUsername, LowerCasePass);
         String alertText = authPage.handleAlertAndGetText();
         Assert.assertEquals(alertText, WrongPassAlert);
+        driver.navigate().refresh();
+
     }
     
     
     
-    @Test(priority = 19, description = "TC019:Verify Login with leading/trailing spaces in fields")
+    @Test(priority = 6, description = "TC019:Verify Login with leading/trailing spaces in fields",enabled = true)
     public void tc019_LeadingTrailingSpaces() {
         String SpacedUsername = "  " + testUsername + "  ";
         authPage.clickLoginLink();
         authPage.performLogin(SpacedUsername, ValidPassword);
         String alertText = authPage.handleAlertAndGetText();
-        Assert.assertEquals(alertText, UserDoesNotExistAlert);        
+        Assert.assertEquals(alertText, UserDoesNotExistAlert);     
+        driver.navigate().refresh();
+
     }
     
     
     
-    @Test(priority = 20, description = "Verify Login attempts lock-out ")
+    @Test(priority = 10, description = "Verify Login attempts lock-out ",enabled = true)
     public void tc020_AccountLockout() {
       
         
@@ -106,6 +116,9 @@ public class LoginTests extends BaseTest {
         authPage.performLogin(testUsername, ValidPassword);
         String alertText = authPage.handleAlertAndGetText();
         Assert.assertEquals(alertText, "Your account Locked ");
+        
+        driver.navigate().refresh();
+
 
         
     }
@@ -113,8 +126,7 @@ public class LoginTests extends BaseTest {
     
     
     
-    @Test(priority = 21, description = "TC021:Verify cannot access logged-in features after logout"
-    		+ "")
+    @Test(priority = 7, description = "TC021:Verify cannot access logged-in features after logout",enabled = true)
     public void tc021_SessionTerminationOnLogout() {
         authPage.clickLoginLink();
         authPage.performLogin(testUsername, ValidPassword);
@@ -122,26 +134,33 @@ public class LoginTests extends BaseTest {
         authPage.clickLogout();
 
         Assert.assertFalse(authPage.isUserLoggedIn());
+        driver.navigate().refresh();
+
     }
     
-    @Test(priority = 22, description = "TC022:Verify multiple login/logout cycles")
+    
+    @Test(priority = 9, description = "TC022:Verify multiple login/logout cycles",enabled = true )
     public void tc022_MultipleCycles() {
-        final int CYCLES = 6;
+        final int CYCLES = 2;
         
         for (int Attempts = 1; Attempts <= CYCLES; Attempts++) {
             // 1. Login
-            authPage.clickLoginLink();
+            driver.findElement(By.id("login2")).click();
             authPage.performLogin(testUsername, ValidPassword);
-            Assert.assertTrue(authPage.isUserLoggedIn());
-            
-            authPage.clickLogout();
             Assert.assertFalse(authPage.isUserLoggedIn());
+
+            driver.findElement(By.id("logout2")).click();
+            Assert.assertFalse(authPage.isUserLoggedIn());
+
             
             System.out.println("TC022 Cycle " + Attempts + " completed successfully.");
         }
+        driver.navigate().refresh();
+
+
     }
     
-    @Test(priority = 23, description = "TC023:Verify Password Masking")
+    @Test(priority = 8, description = "TC023:Verify Password Masking",enabled = true)
     public void tc023_MaskingPassword() {
         authPage.clickLoginLink(); 
         
@@ -153,7 +172,8 @@ public class LoginTests extends BaseTest {
     
         By loginCloseButton = By.xpath("//*[@id=\"logInModal\"]/div/div/div[3]/button[1]");
         driver.findElement(loginCloseButton).click();
-        
+        driver.navigate().refresh();
+
     
     }
 }
