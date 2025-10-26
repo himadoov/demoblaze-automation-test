@@ -12,7 +12,7 @@ public class BaseTest {
      AuthenticationPage authPage;
 
     
-     final String UniqeUserName = "tester_"; 
+     final String UniqeUserName = "tester"; 
      String testUsername; 
      final String ValidPassword = "Password1!";
      final String BASE_URL = "https://www.demoblaze.com/index.html";
