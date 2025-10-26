@@ -1,0 +1,175 @@
+package Automation;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+
+public class Signup extends BaseTest {
+
+    
+    private final String SuccessSignUpMessage="Sign up successful.";
+    private final String UsreExsistMessage = "This user already exist.";
+    private final String RequiredAlret = "Please fill out username and password."; 
+    
+    private final String ShortUser = "a"; 
+    private final String LongUser = "asdasdasdasderhngshdfgiohsdioghjdiofghjiosdfghjfhgjyhjghjhgjifh"; 
+    private final String LoweCaseUserName = "himadoov";
+    private final String SpecialCharUser = "!@#$%^&*()";
+    private final String MixedUserName = "MixedUserName";
+    private final String SpacesUserName = "Spaces User Name";
+
+    
+    private void navigateToSignup() {
+        authPage.clickSignupLink();
+    }
+    
+ 
+    
+   
+    
+    @Test(priority = 1, description = "TC1:Verify Successful Sign Up")
+    public void tc01_SuccessfulSignup() {
+        navigateToSignup(); 
+        authPage.performSignup(testUsername, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, SuccessSignUpMessage);
+    }
+    
+    
+
+   
+    @Test(priority = 2, description = "TC2: Verify Sign Up with existing username")
+    public void tc02_DuplicateUserSignup() {
+        navigateToSignup();
+        authPage.performSignup(testUsername, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, UsreExsistMessage);
+    }
+    
+    
+
+    @Test(priority = 3, description = "TC3:Verify Sign Up with blank username")
+    public void tc03_EmptyUsername() {
+        navigateToSignup();
+        
+        authPage.performSignup("", ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        
+        Assert.assertEquals(alertText, RequiredAlret);
+    }
+    
+    
+    
+
+    @Test(priority = 4, description = "TC4:Verify Sign Up with blank password")
+    public void tc04_EmptyPassword() {
+        navigateToSignup();
+        authPage.performSignup(testUsername, "");
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, RequiredAlret);
+     
+    }
+    
+    
+
+    @Test(priority = 5, description = "TC5: Verify Sign Up with under min length")
+    public void tc05_UserMinLength() {
+        navigateToSignup();
+        authPage.performSignup(ShortUser, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, RequiredAlret);
+        System.out.println(" !!!!TC5: Verify Sign Up with under min length !!! Bug Founded");
+    }
+    
+    
+
+    @Test(priority = 6, description = "TC6:Verify Sign Up with over max length")
+    public void tc06_OverMaxUser() {
+        navigateToSignup();
+        authPage.performSignup(LongUser, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, RequiredAlret);
+        System.out.println("!!!  Bug Founded!!!  TC6:Verify Sign Up with over max length  Bug Founded");
+    }
+    
+    
+
+    @Test(priority = 7, description = "TC7: Verify Sign Up with special characters.")
+    public void tc07_specialCharactersUser() {
+        navigateToSignup();
+        authPage.performSignup(SpecialCharUser, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, RequiredAlret);
+        System.out.println("!!!  Bug Founded!!! TC7: Verify Sign Up with special characters  Bug Founded");
+
+    }
+
+
+    @Test(priority = 8, description = "TC8: Verify Sign Up with leading/trailing spaces")
+    public void tc08_SpacesUserName() {
+        navigateToSignup();  
+        authPage.performSignup(SpacesUserName, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, RequiredAlret);
+        System.out.println("!!!  Bug Founded!!! TC8: Verify Sign Up with leading/trailing spaces Bug Founded");
+
+    }
+
+    
+    
+    @Test(priority = 9, description = "TC9: Verify Sign Up with all lowercase characters")
+    public void tc09_LoweCaseUserName() {
+        navigateToSignup();
+        authPage.performSignup(LoweCaseUserName, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, SuccessSignUpMessage);
+    }
+
+
+    @Test(priority = 10, description = "TC10:Verify Sign Up with mixed case characters")
+    public void tc10_MixedUserName() {
+        navigateToSignup();
+        authPage.performSignup(MixedUserName, ValidPassword);
+        String alertText = authPage.handleAlertAndGetText();
+        Assert.assertEquals(alertText, SuccessSignUpMessage);
+    }
+
+    
+    @Test(priority = 11, description = "TC11: Verify Password Masking")
+    public void tc11_MaskingPassword() {
+        navigateToSignup();
+        WebElement passwordField = driver.findElement(By.id("sign-password"));
+        String fieldType = passwordField.getAttribute("type");
+        Assert.assertEquals(fieldType, "password");
+        
+      
+    }
+
+    @Test(priority = 12, description = "Verify 'X' button closes the dialog")
+    public void tc12_XButtonCloses() {
+        navigateToSignup();
+        By closeButton = By.xpath("//*[@id=\"signInModal\"]/div/div/div[1]/button/span");
+        driver.findElement(closeButton).click();
+        By signupModal = By.id("signInModal");
+		boolean isModalClosed = driver.findElements(signupModal).isEmpty();
+		Assert.assertTrue(isModalClosed);
+        
+    }
+    
+    
+
+
+    @Test(priority = 13, description = "TC13: Verify 'Close' button closes the dialog")
+    public void tc13_ConsecutiveFlowTest() {
+        
+        navigateToSignup();
+        By closeButton = By.xpath("//*[@id=\"signInModal\"]/div/div/div[3]/button[2]");
+        By signupModal = By.id("signInModal");
+        driver.findElement(closeButton).click();
+        boolean isModalClosed = driver.findElements(signupModal).isEmpty();
+		Assert.assertTrue(isModalClosed);
+        
+    }
+}
